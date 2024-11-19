@@ -1,0 +1,62 @@
+# Byte-compiled / optimized / DLL files
+__pycache__
+/tests/__pycache__
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+dist/
+build/
+*.egg-info/
+
+# Pytest cache
+.pytest_cache/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+*.cover
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.lcov
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/
+
+# IDE specific settings
+.idea/
+
+# Logs
+*.log
+
+# Local configuration files
+*.env
+*.local
+
+# Generated files (e.g., config files for virtualenvwrapper, etc.)
+pip-log.txt
+pip-delete-this-directory.txt
