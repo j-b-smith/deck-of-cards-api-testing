@@ -3,13 +3,12 @@ name: API Tests
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
-  # Individual test suite jobs
   positive:
     name: Positive Tests
     runs-on: ubuntu-latest
@@ -106,10 +105,10 @@ jobs:
         name: url-builder-test-report
         path: url_builder_report.html
 
-  # Aggregator job
   aggregate-results:
     name: Aggregate Results
     needs: [positive, negative, deck_provider, url_builder]
+    if: always()
     runs-on: ubuntu-latest
     steps:
     - name: Download all test reports
