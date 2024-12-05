@@ -1,7 +1,6 @@
 import pytest
 from deck_provider import DeckProvider
 
-
 def test_draw_more_than_available():
     """
     Test drawing more cards than available in a new deck.
