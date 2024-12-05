@@ -4,18 +4,18 @@ on:
   # Run tests on Pull Requests
   pull_request:
     branches:
-      - main
+      - master
   # Allow manual trigger
   workflow_dispatch:
     inputs:
       testType:
-        description: "Which tests to run (positive, negative, all)"
+        description: "Which tests to run (positive, negative, url_builder, deck_provider, all)"
         required: false
         default: "all"
   # Run all tests on any merge to main
   push:
     branches:
-      - main
+      - master
 
 jobs:
   api-tests:
@@ -23,7 +23,7 @@ jobs:
 
     strategy:
       matrix:
-        test-type: ["positive", "negative", "all"]
+        test-type: ["positive", "negative", "url_builder", "deck_provider", "all"]
 
     steps:
     - name: Checkout code
@@ -45,13 +45,19 @@ jobs:
       run: |
         case "${{ matrix.test-type }}" in
           positive)
-            pytest -m positive --html=report.html --self-contained-html
+            pytest tests/test_deck_of_cards_positive_scenarios.py --html=report_positive.html --self-contained-html
             ;;
           negative)
-            pytest -m negative --html=report.html --self-contained-html
+            pytest tests/test_deck_of_cards_negative_scenarios.py --html=report_negative.html --self-contained-html
+            ;;
+          url_builder)
+            pytest tests/test_url_builder.py --html=report_url_builder.html --self-contained-html
+            ;;
+          deck_provider)
+            pytest tests/test_deck_provider.py --html=report_deck_provider.html --self-contained-html
             ;;
           all)
-            pytest --html=report.html --self-contained-html
+            pytest tests/ --html=report_all.html --self-contained-html
             ;;
           *)
             echo "Invalid test type"; exit 1
@@ -62,4 +68,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: test-report
-        path: report.html
+        path: |
+          report_positive.html
+          report_negative.html
+          report_url_builder.html
+          report_deck_provider.html
+          report_all.html
