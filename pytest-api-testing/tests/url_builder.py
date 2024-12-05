@@ -1,5 +1,14 @@
 class URLBuilder:
     BASE_URL = "https://deckofcardsapi.com/api/deck"
+    NEW_DECK_URL = f"{BASE_URL}/new/"
+    SHUFFLE_SUFFIX = "/shuffle/"
+    DRAW_SUFFIX = "/draw/"
+    PILE_SUFFIX = "/pile/"
+    RETURN_SUFFIX = "/return/"
+    CARDS_PARAM = "?cards="
+    SHUFFLE_PARAM = "shuffle=true"
+    JOKERS_PARAM = "jokers_enabled=true"
+    REMAINING_PARAM = "remaining=true"
 
     @staticmethod
     def new_deck(shuffle: bool = False, jokers_enabled: bool = False) -> str:
@@ -7,12 +16,12 @@ class URLBuilder:
         Constructs the URL for creating a new deck.
         Optionally includes parameters to shuffle the deck or add jokers.
         """
-        url = f"{URLBuilder.BASE_URL}/new/"
+        url = URLBuilder.NEW_DECK_URL
         params = []
         if shuffle:
-            params.append("shuffle=true")
+            params.append(URLBuilder.SHUFFLE_PARAM)
         if jokers_enabled:
-            params.append("jokers_enabled=true")
+            params.append(URLBuilder.JOKERS_PARAM)
         if params:
             url += "?" + "&".join(params)
         return url
@@ -23,7 +32,7 @@ class URLBuilder:
         Constructs the URL for creating a partial deck with specified cards.
         Example cards string: "AS,2S,KH"
         """
-        return f"{URLBuilder.BASE_URL}/new/?cards={cards}"
+        return f"{URLBuilder.NEW_DECK_URL}{URLBuilder.CARDS_PARAM}{cards}"
 
     @staticmethod
     def shuffle_deck(deck_id: str) -> str:
@@ -32,7 +41,7 @@ class URLBuilder:
         """
         if not deck_id:
             raise ValueError("deck_id is required to shuffle the deck")
-        return f"{URLBuilder.BASE_URL}/{deck_id}/shuffle/"
+        return f"{URLBuilder.BASE_URL}/{deck_id}{URLBuilder.SHUFFLE_SUFFIX}"
 
     @staticmethod
     def reshuffle_deck(deck_id: str, remaining_only: bool = False) -> str:
@@ -42,9 +51,9 @@ class URLBuilder:
         """
         if not deck_id:
             raise ValueError("deck_id is required to reshuffle the deck")
-        url = f"{URLBuilder.BASE_URL}/{deck_id}/shuffle/"
+        url = f"{URLBuilder.BASE_URL}/{deck_id}{URLBuilder.SHUFFLE_SUFFIX}"
         if remaining_only:
-            url += "?remaining=true"
+            url += f"?{URLBuilder.REMAINING_PARAM}"
         return url
 
     @staticmethod
@@ -54,7 +63,7 @@ class URLBuilder:
         """
         if not deck_id:
             raise ValueError("deck_id is required to draw cards")
-        return f"{URLBuilder.BASE_URL}/{deck_id}/draw/?count={count}"
+        return f"{URLBuilder.BASE_URL}/{deck_id}{URLBuilder.DRAW_SUFFIX}?count={count}"
 
     @staticmethod
     def add_to_pile(deck_id: str, pile_name: str, cards: str) -> str:
@@ -63,7 +72,7 @@ class URLBuilder:
         """
         if not deck_id:
             raise ValueError("deck_id is required to add cards to a pile")
-        return f"{URLBuilder.BASE_URL}/{deck_id}/pile/{pile_name}/add/?cards={cards}"
+        return f"{URLBuilder.BASE_URL}/{deck_id}{URLBuilder.PILE_SUFFIX}{pile_name}/add/{URLBuilder.CARDS_PARAM}{cards}"
 
     @staticmethod
     def draw_from_pile(deck_id: str, pile_name: str, count: int = 1) -> str:
@@ -72,7 +81,7 @@ class URLBuilder:
         """
         if not deck_id:
             raise ValueError("deck_id is required to draw from a pile")
-        return f"{URLBuilder.BASE_URL}/{deck_id}/pile/{pile_name}/draw/?count={count}"
+        return f"{URLBuilder.BASE_URL}/{deck_id}{URLBuilder.PILE_SUFFIX}{pile_name}{URLBuilder.DRAW_SUFFIX}?count={count}"
 
     @staticmethod
     def list_pile(deck_id: str, pile_name: str) -> str:
@@ -81,7 +90,7 @@ class URLBuilder:
         """
         if not deck_id:
             raise ValueError("deck_id is required to list cards in a pile")
-        return f"{URLBuilder.BASE_URL}/{deck_id}/pile/{pile_name}/list/"
+        return f"{URLBuilder.BASE_URL}/{deck_id}{URLBuilder.PILE_SUFFIX}{pile_name}/list/"
 
     @staticmethod
     def shuffle_pile(deck_id: str, pile_name: str) -> str:
@@ -90,7 +99,7 @@ class URLBuilder:
         """
         if not deck_id:
             raise ValueError("deck_id is required to shuffle a pile")
-        return f"{URLBuilder.BASE_URL}/{deck_id}/pile/{pile_name}/shuffle/"
+        return f"{URLBuilder.BASE_URL}/{deck_id}{URLBuilder.PILE_SUFFIX}{pile_name}/shuffle/"
 
     @staticmethod
     def return_to_deck(deck_id: str, cards: str) -> str:
@@ -99,4 +108,4 @@ class URLBuilder:
         """
         if not deck_id:
             raise ValueError("deck_id is required to return cards")
-        return f"{URLBuilder.BASE_URL}/{deck_id}/return/?cards={cards}"
+        return f"{URLBuilder.BASE_URL}/{deck_id}{URLBuilder.RETURN_SUFFIX}?cards={cards}"
