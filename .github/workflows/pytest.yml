@@ -104,26 +104,3 @@ jobs:
       with:
         name: url-builder-test-report
         path: url_builder_report.html
-
-  aggregate-results:
-    name: Aggregate Results
-    needs: [positive, negative, deck_provider, url_builder]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download all test reports
-      uses: actions/download-artifact@v3
-      with:
-        path: ./reports
-
-    - name: Combine Reports
-      run: |
-        mkdir -p combined_reports
-        cp ./reports/* combined_reports/
-        echo "Reports combined in the 'combined_reports' folder."
-
-    - name: Upload Combined Reports
-      uses: actions/upload-artifact@v4
-      with:
-        name: combined-test-reports
-        path: combined_reports/
